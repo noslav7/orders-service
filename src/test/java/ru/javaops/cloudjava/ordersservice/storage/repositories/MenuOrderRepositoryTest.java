@@ -66,6 +66,22 @@ public class MenuOrderRepositoryTest {
     }
 
     @Test
+    void findAllByCreatedBy_returnsCorrectSortedByDateDesc() {
+        var pageRequest = PageRequest.of(0, 2)
+                .withSort(Sort.by(Sort.Direction.DESC, "createdAt"));
+        Flux<MenuOrder> orders = repository.findAllByCreatedBy(USERNAME_ONE, pageRequest);
+        StepVerifier.create(orders)
+                .expectNextMatches(order ->
+                        order.getCreatedBy().equals(USERNAME_ONE) &&
+                                order.getCreatedAt().equals(ORDER_THREE_DATE))
+                .expectNextMatches(order ->
+                        order.getCreatedBy().equals(USERNAME_ONE) &&
+                                order.getCreatedAt().equals(ORDER_TWO_DATE) &&
+                                order.getUpdatedAt() != null)
+                .verifyComplete();
+    }
+
+    @Test
     void findAllByCreatedBy_returnsCorrectSortedByDateAsc() {
         var pageRequest = PageRequest.of(0, 2)
                 .withSort(Sort.by(Sort.Direction.ASC,"createdAt"));
