@@ -27,3 +27,18 @@ spring:
     user: ${spring.r2dbc.username}
     password: ${spring.r2dbc.password}
     url: jdbc:postgresql://localhost:15432/orders_service_db
+
+external:
+  # url для связи с Menu Service
+  menu-service-url: "http://localhost:9091"
+  # путь эндпоинта для получения информации о доступности и ценах блюд
+  menu-info-path: "/v1/menu-items/menu-info"
+  # таймаут, который будет использоваться при связи с Menu Service, чтобы не ожидать ответа вечно
+  default-timeout: 2s
+  # время ожидания перед тем, как совершить повторную попытку получить данные из Menu Service
+  retry-backoff: 100ms
+  # количество повторных попыток связи с Menu Service
+  retry-count: 5
+  # фактор неопределенности для того, чтобы минимизировать возможность сценария,
+  # при котором несколько инстансов Orders Service будут одновременно посылать ретраи в Menu Service.
+  retry-jitter: 0.75
