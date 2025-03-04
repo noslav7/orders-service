@@ -14,6 +14,7 @@ import ru.javaops.cloudjava.ordersservice.config.props.OrderServiceProps;
 import ru.javaops.cloudjava.ordersservice.dto.GetMenuInfoRequest;
 import ru.javaops.cloudjava.ordersservice.dto.GetMenuInfoResponse;
 import ru.javaops.cloudjava.ordersservice.dto.MenuInfo;
+import ru.javaops.cloudjava.ordersservice.exception.OrderServiceException;
 import ru.javaops.cloudjava.ordersservice.testdata.TestDataProvider;
 
 import java.io.IOException;
@@ -56,6 +57,19 @@ class MenuClientTest {
     }
 
     @Test
+    void getMenuInfo_returnsError_whenTimeout() throws Exception {
+        mockWebServer.enqueue(TestDataProvider.partialSuccessResponse().setBodyDelay(DELAY_MILLIS, TimeUnit.MILLISECONDS));
+
+        var request = new GetMenuInfoRequest(Set.of("One", "Two", "Three"));
+        Mono<GetMenuInfoResponse> response = menuClient.getMenuInfo(request);
+
+        StepVerifier.create(response)
+                .expectError(OrderServiceException.class)
+                .verify();
+        verifyNumberOfPostRequests(4);
+    }
+
+    @Test
     void getMenuInfo_returnsInfo_whenRetriesSucceed() throws Exception {
         // на первый запрос ответ сервера - SERVICE_UNAVAILABLE
         mockWebServer.enqueue(new MockResponse().setResponseCode(HttpStatus.SERVICE_UNAVAILABLE.value()));
@@ -68,6 +82,18 @@ class MenuClientTest {
         Mono<GetMenuInfoResponse> response = menuClient.getMenuInfo(request);
         assertResponseCorrect(response);
         verifyNumberOfPostRequests(3);
+    }
+
+    @Test
+    void getMenuInfo_returnsErrorWhenServiceUnavailableAndAllRetriesExhausted() throws Exception {
+        mockWebServer.enqueue(new MockResponse().setResponseCode(HttpStatus.SERVICE_UNAVAILABLE.value()));
+        var request = new GetMenuInfoRequest(Set.of("One", "Two", "Three"));
+        Mono<GetMenuInfoResponse> response = menuClient.getMenuInfo(request);
+
+        StepVerifier.create(response)
+                .expectError(OrderServiceException.class)
+                .verify();
+        verifyNumberOfPostRequests(4);
     }
 
     @Test
