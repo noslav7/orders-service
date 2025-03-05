@@ -1,0 +1,179 @@
+{
+	"info": {
+		"_postman_id": "724c56ba-72f1-4c17-a056-2cb5960af2b9",
+		"name": "cloud-java-orders-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14134951"
+	},
+	"item": [
+		{
+			"name": "create menu one Copy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"One\",\n    \"description\": \"Nice Item One\",\n    \"price\": 10.10,\n    \"category\": \"drinks\",\n    \"timeToCook\": 1000,\n    \"weight\": 10.20,\n    \"imageUrl\": \"http://images.com/one.png\",\n    \"ingredientCollection\": {\n        \"ingredients\": [\n            {\n                \"name\": \"ingredient one\",\n                \"calories\": 10\n            },\n            {\n                \"name\": \"ingredient two\",\n                \"calories\": 20\n            }\n        ]\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9091/v1/menu-items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9091",
+					"path": [
+						"v1",
+						"menu-items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get menu for Category DRINKS Copy",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9091/v1/menu-items?category=DRINKS",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9091",
+					"path": [
+						"v1",
+						"menu-items"
+					],
+					"query": [
+						{
+							"key": "category",
+							"value": "DRINKS"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get menu not-found Copy",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9091/v1/menu-items/1000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9091",
+					"path": [
+						"v1",
+						"menu-items",
+						"1000"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create menu two Copy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Two\",\n    \"description\": \"Nice Item Two\",\n    \"price\": 10.10,\n    \"category\": \"drinks\",\n    \"timeToCook\": 1000,\n    \"weight\": 20.20,\n    \"imageUrl\": \"http://images.com/two.png\",\n    \"ingredientCollection\": {\n        \"ingredients\": [\n            {\n                \"name\": \"ingredient one\",\n                \"calories\": 10\n            },\n            {\n                \"name\": \"ingredient two\",\n                \"calories\": 20\n            }\n        ]\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9091/v1/menu-items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9091",
+					"path": [
+						"v1",
+						"menu-items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create menu three Copy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Three\",\n    \"description\": \"Nice Item Three\",\n    \"price\": 10.10,\n    \"category\": \"drinks\",\n    \"timeToCook\": 1000,\n    \"weight\": 30.20,\n    \"imageUrl\": \"http://images.com/three.png\",\n    \"ingredientCollection\": {\n        \"ingredients\": [\n            {\n                \"name\": \"ingredient one\",\n                \"calories\": 10\n            },\n            {\n                \"name\": \"ingredient two\",\n                \"calories\": 20\n            }\n        ]\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9091/v1/menu-items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9091",
+					"path": [
+						"v1",
+						"menu-items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Submit order for One Two Three Copy",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-User-Name",
+						"value": "Alex",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nameToQuantity\": {\n        \"One\": 10,\n        \"Two\": 20,\n        \"Three\": 30\n    },\n    \"address\": {\n        \"city\": \"Moscow\",\n        \"street\": \"Street\",\n        \"house\": 1,\n        \"apartment\": 1\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9092/v1/menu-orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9092",
+					"path": [
+						"v1",
+						"menu-orders"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

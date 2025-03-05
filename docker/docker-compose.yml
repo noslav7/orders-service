@@ -1,5 +1,48 @@
 version: "3.8"
 services:
+  orders-service:
+    image: "orders-service"
+    container_name: "orders-service"
+    depends_on:
+      postgres-orders:
+        condition: service_healthy
+    ports:
+      - "9092:9092"
+    environment:
+      - SPRING_R2DBC_URL=r2dbc:postgresql://postgres-orders:5432/orders_service_db
+      - SPRING_FLYWAY_URL=jdbc:postgresql://postgres-orders:5432/orders_service_db
+      - EXTERNAL_MENU_SERVICE_URL=http://menu-service:9091
+
+  menu-service:
+    image: "menu-service"
+    container_name: "menu-service"
+    depends_on:
+      postgres-menus:
+        condition: service_healthy
+    ports:
+      - "9091:9091"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-menus:5431/menu_service_db
+
+  postgres-menus:
+    image: "postgres:16.1"
+    container_name: "postgres-menus"
+    ports:
+      - "5431:5431"
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=menu_service_db
+      - PGPORT=5431
+    volumes:
+      - db-menus:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-d", "menu_service_db"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+
   postgres-orders:
     image: "postgres:16.1"
     container_name: "postgres-orders"
@@ -20,4 +63,6 @@ services:
 
 volumes:
   db-orders:
+    driver: local
+  db-menus:
     driver: local
