@@ -19,7 +19,7 @@ services:
     image: "orders-service"
     container_name: "orders-service"
     depends_on:
-      postgres-orders:
+      postgres:
         condition: service_healthy
       config-server:
         condition: service_healthy
@@ -29,8 +29,8 @@ services:
       - CONFIGSERVER_IMPORT=configserver:${CONFIG_SERVER_URL}
       - SPRING_CLOUD_CONFIG_FAIL_FAST=true
       - SPRING_PROFILES_ACTIVE=prod
-      - DB_USER=${ORDERS_DB_USER}
-      - DB_PASSWORD=${ORDERS_DB_PASSWORD}
+      - DB_USER=${POSTGRES_DB_USER}
+      - DB_PASSWORD=${POSTGRES_DB_PASSWORD}
       - DB_URL=${ORDERS_DB_URL}
       - FLYWAY_DB_URL=${ORDERS_DB_FLYWAY_URL}
       - MENU_SERVICE_URL=${MENU_SERVICE_URL}
@@ -39,7 +39,7 @@ services:
     image: "menu-service"
     container_name: "menu-service"
     depends_on:
-      postgres-menus:
+      postgres:
         condition: service_healthy
       config-server:
         condition: service_healthy
@@ -49,49 +49,32 @@ services:
       - CONFIGSERVER_IMPORT=configserver:${CONFIG_SERVER_URL}
       - SPRING_CLOUD_CONFIG_FAIL_FAST=true
       - SPRING_PROFILES_ACTIVE=prod
-      - DB_USER=${MENU_DB_USER}
-      - DB_PASSWORD=${MENU_DB_PASSWORD}
+      - DB_USER=${POSTGRES_DB_USER}
+      - DB_PASSWORD=${POSTGRES_DB_PASSWORD}
       - DB_URL=${MENU_DB_URL}
 
-  postgres-menus:
+  postgres:
     image: "postgres:16.1"
-    container_name: "postgres-menus"
-    ports:
-      - "5431:5431"
-    environment:
-      - POSTGRES_USER=${MENU_DB_USER}
-      - POSTGRES_PASSWORD=${MENU_DB_PASSWORD}
-      - POSTGRES_DB=menu_service_db
-      - PGPORT=5431
-    volumes:
-      - db-menus:/var/lib/postgresql/data
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready", "-d", "menu_service_db"]
-      interval: 30s
-      timeout: 60s
-      retries: 5
-      start_period: 80s
-
-  postgres-orders:
-    image: "postgres:16.1"
-    container_name: "postgres-orders"
+    container_name: "postgres"
     ports:
       - "15432:5432"
     environment:
-      - POSTGRES_USER=${ORDERS_DB_USER}
-      - POSTGRES_PASSWORD=${ORDERS_DB_PASSWORD}
-      - POSTGRES_DB=orders_service_db
+      - POSTGRES_USER=${POSTGRES_DB_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_DB_PASSWORD}
     volumes:
-      - db-orders:/var/lib/postgresql/data
+      - ./postgresql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - db-data:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready", "-d", "orders_service_db" ]
+      test: [ "CMD-SHELL", "pg_isready -d menu_service_db && pg_isready -d orders_service_db" ]
       interval: 30s
       timeout: 60s
       retries: 5
       start_period: 80s
+    command: >
+      -c wal_level=logical
+      -c max_wal_senders=1
+      -c max_replication_slots=1
 
 volumes:
-  db-orders:
-    driver: local
-  db-menus:
+  db-data:
     driver: local
