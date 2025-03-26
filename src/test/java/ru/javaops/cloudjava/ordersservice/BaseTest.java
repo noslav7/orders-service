@@ -21,7 +21,8 @@ public abstract class BaseTest {
             .withReuse(true)
             .withDatabaseName("test_database")
             .withUsername("user")
-            .withPassword("password");
+            .withPassword("password")
+            .withCommand("-c wal_level=logical -c max_wal_senders=1 -c max_replication_slots=1");
 
     static {
         container.start();

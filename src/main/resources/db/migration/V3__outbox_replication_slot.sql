@@ -1,0 +1,1 @@
+SELECT pg_create_logical_replication_slot('postgres_debezium', 'pgoutput');
