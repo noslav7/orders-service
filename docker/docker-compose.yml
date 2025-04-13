@@ -72,8 +72,9 @@ services:
       start_period: 80s
     command: >
       -c wal_level=logical
-      -c max_wal_senders=1
-      -c max_replication_slots=1
+      -c max_wal_senders=4
+      -c max_replication_slots=4
+  
 
   kafka:
     image: confluentinc/cp-kafka:7.5.2
@@ -146,6 +147,7 @@ services:
       CONNECT_PLUGIN_PATH: '/usr/share/java,/usr/share/confluent-hub-components/,/connectors/'
     volumes:
       - connect-data:/opt/docker/db/data
+      - connect-plugins:/usr/share/confluent-hub-components
     command:
       - bash
       - -c
@@ -161,4 +163,6 @@ volumes:
   kafka-data:
     driver: local
   connect-data:
+    driver: local
+  connect-plugins:
     driver: local

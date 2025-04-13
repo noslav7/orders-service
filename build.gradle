@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.2.5'
     id 'io.spring.dependency-management' version '1.1.5'
+    id 'com.github.davidmc24.gradle.plugin.avro' version '1.9.1'
 }
 
 group = 'ru.javaops.cloudjava'
@@ -23,12 +24,17 @@ configurations {
 
 repositories {
     mavenCentral()
+    maven {
+        url = "https://packages.confluent.io/maven/"
+    }
 }
 
 ext {
     wiremockVersion = '3.2.0'
     springdocVersion = '2.5.0'
     springCloudVersion = '2023.0.1'
+    avroSerializerVersion = '7.6.0'
+    avroVersion = '1.11.3'
 }
 
 dependencies {
@@ -40,6 +46,9 @@ dependencies {
     implementation 'org.postgresql:r2dbc-postgresql'
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.retry:spring-retry'
+    implementation 'org.springframework.kafka:spring-kafka'
+    implementation "io.confluent:kafka-avro-serializer:${avroSerializerVersion}"
+    implementation "org.apache.avro:avro:${avroVersion}"
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.flywaydb:flyway-core'
     runtimeOnly 'org.postgresql:postgresql'
