@@ -2,6 +2,8 @@ package ru.javaops.cloudjava.ordersservice.service.impl;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
@@ -17,12 +19,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static ru.javaops.cloudjava.ordersservice.testdata.TestConstants.*;
 import static ru.javaops.cloudjava.ordersservice.testdata.TestDataProvider.createOrderRequest;
 import static ru.javaops.cloudjava.ordersservice.testdata.TestDataProvider.existingItems;
 
+@EnableAutoConfiguration(exclude = {KafkaAutoConfiguration.class})
 class MenuOrderServiceImplTest extends BaseIntegrationTest {
 
     @Autowired

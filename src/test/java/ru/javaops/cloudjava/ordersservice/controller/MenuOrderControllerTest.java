@@ -2,6 +2,8 @@ package ru.javaops.cloudjava.ordersservice.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -17,6 +19,7 @@ import static ru.javaops.cloudjava.ordersservice.testdata.TestConstants.*;
 import static ru.javaops.cloudjava.ordersservice.testdata.TestDataProvider.*;
 
 @AutoConfigureWebTestClient(timeout = "20000")
+@EnableAutoConfiguration(exclude = {KafkaAutoConfiguration.class})
 class MenuOrderControllerTest extends BaseIntegrationTest {
 
     @Autowired
