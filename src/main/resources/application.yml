@@ -42,8 +42,26 @@ spring:
         max-interval: 2000
         multiplier: 1.1
 
+  kafka:
+    bootstrap-servers: localhost:9097
+    consumer:
+      group-id: ${spring.application.name}
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      properties:
+        specific.avro.reader: true
+        schema.registry.url: http://localhost:8081
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+    listener:
+      ack-mode: manual
+
 configserver:
   import: optional:configserver:${CONFIG_SERVER_URL:http://localhost:9095}
+
+kafkaprops:
+  order-dispatch-topic: v1.orders_dispatch
+  nack-sleep-duration: 100ms
 
 external:
   # url для связи с Menu Service
