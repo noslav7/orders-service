@@ -34,6 +34,7 @@ services:
       - DB_URL=${ORDERS_DB_URL}
       - FLYWAY_DB_URL=${ORDERS_DB_FLYWAY_URL}
       - MENU_SERVICE_URL=${MENU_SERVICE_URL}
+    restart: on-failure
 
   menu-service:
     image: "menu-service"
@@ -52,6 +53,7 @@ services:
       - DB_USER=${POSTGRES_DB_USER}
       - DB_PASSWORD=${POSTGRES_DB_PASSWORD}
       - DB_URL=${MENU_DB_URL}
+    restart: on-failure
 
   postgres:
     image: "postgres:16.1"
