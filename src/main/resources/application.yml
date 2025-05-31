@@ -41,7 +41,7 @@ spring:
         initial-interval: 1000
         max-interval: 2000
         multiplier: 1.1
-      label: discovery_service
+      label: gateway_service
 
   kafka:
     bootstrap-servers: localhost:9097
@@ -90,6 +90,22 @@ external:
   # фактор неопределенности для того, чтобы минимизировать возможность сценария,
   # при котором несколько инстансов Orders Service будут одновременно посылать ретраи в Menu Service.
   retry-jitter: 0.75
+  zipkin-endpoint: http://localhost:9411/api/v2/spans
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+    propagation:
+      type: b3
+  zipkin:
+    tracing:
+      endpoint: ${external.zipkin-endpoint}
 
 springdoc:
   api-docs:

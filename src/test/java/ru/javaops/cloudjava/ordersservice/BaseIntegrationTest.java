@@ -3,6 +3,8 @@ package ru.javaops.cloudjava.ordersservice;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 
@@ -13,7 +15,9 @@ import static ru.javaops.cloudjava.ordersservice.testdata.TestConstants.MENU_INF
 import static ru.javaops.cloudjava.ordersservice.testdata.TestDataProvider.readPartiallySuccessfulResponse;
 import static ru.javaops.cloudjava.ordersservice.testdata.TestDataProvider.readSuccessfulResponse;
 
+@ActiveProfiles("test")
 @SpringBootTest
+@Import(TestWebClientConfig.class)
 public class BaseIntegrationTest extends BaseTest {
 
     @RegisterExtension

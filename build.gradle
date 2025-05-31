@@ -51,6 +51,8 @@ dependencies {
     implementation "io.confluent:kafka-avro-serializer:${avroSerializerVersion}"
     implementation "org.apache.avro:avro:${avroVersion}"
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    implementation 'io.micrometer:micrometer-tracing-bridge-brave'
+    implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.flywaydb:flyway-core'
     runtimeOnly 'org.postgresql:postgresql'
