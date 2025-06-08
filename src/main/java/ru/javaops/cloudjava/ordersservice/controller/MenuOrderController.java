@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -29,7 +31,7 @@ import ru.javaops.cloudjava.ordersservice.service.MenuOrderService;
 @RequestMapping("/v1/menu-orders")
 public class MenuOrderController {
 
-    public static final String USER_HEADER = "X-User-Name";
+    public static final String USERNAME_CLAIM = "preferred_username";
 
     private final MenuOrderService menuOrderService;
 
@@ -64,7 +66,8 @@ public class MenuOrderController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<OrderResponse> submitMenuOrder(@RequestBody @Valid CreateOrderRequest request,
-                                               @RequestHeader(USER_HEADER) String username) {
+                                               @AuthenticationPrincipal Jwt jwt) {
+        var username = jwt.getClaimAsString(USERNAME_CLAIM);
         log.info("Received POST request to submit order: {}", request);
         return menuOrderService.createOrder(request, username);
     }
@@ -94,7 +97,8 @@ public class MenuOrderController {
             @RequestParam(value = "sortBy", defaultValue = "date_asc")
             @NotBlank(message = "Параметр сортировки не должен быть пустым.")
             String sortBy,
-            @RequestHeader(USER_HEADER) String username) {
+            @AuthenticationPrincipal Jwt jwt) {
+        var username = jwt.getClaimAsString(USERNAME_CLAIM);
         log.info("Received request to GET orders of user with name={}", username);
         return menuOrderService.getOrdersOfUser(username, SortBy.fromString(sortBy), from, size);
     }

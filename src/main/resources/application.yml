@@ -41,7 +41,14 @@ spring:
         initial-interval: 1000
         max-interval: 2000
         multiplier: 1.1
-      label: gateway_service
+      label: security_client
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${external.keycloak-url}
+          jwk-set-uri: ${external.jwk-set-url}
 
   kafka:
     bootstrap-servers: localhost:9097
@@ -91,6 +98,8 @@ external:
   # при котором несколько инстансов Orders Service будут одновременно посылать ретраи в Menu Service.
   retry-jitter: 0.75
   zipkin-endpoint: http://localhost:9411/api/v2/spans
+  keycloak-url: ${KEYCLOAK_URL:http://keycloak:8080/realms/cloud-java}
+  jwk-set-url: ${JWK_SET_URL:http://keycloak:8080/realms/cloud-java/protocol/openid-connect/certs}
 
 management:
   endpoints:

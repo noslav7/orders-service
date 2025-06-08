@@ -33,8 +33,10 @@ public class TestConstants {
     public static final int MENU_CREATE_ONE_QUANTITY = 10;
     public static final int MENU_CREATE_TWO_QUANTITY = 20;
     public static final int MENU_CREATE_THREE_QUANTITY = 30;
-    public static final String USERNAME_ONE = "username1";
+    public static final String USERNAME_ONE = "jane";
     public static final BigDecimal SUCCESS_TOTAL_PRICE = BigDecimal.valueOf(1414.0);
+    public static final String USERNAME_NO_ORDERS = "max";
+    public static final String ADMIN_USERNAME = "alex";
     public static final BigDecimal MENU_CREATE_ONE_PRICE = BigDecimal.valueOf(10.1);
     public static final BigDecimal MENU_CREATE_TWO_PRICE = BigDecimal.valueOf(20.2);
     public static final BigDecimal MENU_CREATE_THREE_PRICE = BigDecimal.valueOf(30.3);
