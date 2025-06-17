@@ -36,6 +36,7 @@ ext {
     avroSerializerVersion = '7.6.0'
     avroVersion = '1.11.3'
     awaitilityVersion = '4.2.1'
+    lokiAppenderVersion = '1.5.1'
 }
 
 dependencies {
@@ -57,6 +58,8 @@ dependencies {
     runtimeOnly 'org.flywaydb:flyway-core'
     runtimeOnly 'org.postgresql:postgresql'
     runtimeOnly 'org.springframework:spring-jdbc'
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+    runtimeOnly "com.github.loki4j:loki-logback-appender:${lokiAppenderVersion}"
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
